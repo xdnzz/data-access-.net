@@ -12,57 +12,80 @@ namespace Blog
         {
             var connection = new SqlConnection(CONNECTION_STRING);
             connection.Open();
-            ReadUser();
+            ReadRoles(connection);
             connection.Close();
         }
         public static void ReadUsers(SqlConnection connection)
         {
             var repository = new UserRepository(connection);
+            var users = repository.Get();
+            repository.Delete(1);
 
-            var users = repository.GetDataDatabase();
+            foreach (var user in users) repository.Delete(user);
 
-                foreach (var user in users) Console.WriteLine(user);
-                
         }
 
-        public static void ReadUser()
+        public static void ReadRoles(SqlConnection connection)
         {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                var users = connection.Get<User>(1);
-                Console.WriteLine(users.Name);
-            }
+            var repository = new RoleRepository(connection);
+
+            var roles = repository.Get();
+
+            foreach (var role in roles) Console.WriteLine(role);
+
         }
 
-        public static void CreateUser()
-        {
-            var user = new User()
-            {
-                Bio = "Equipe Brando.dev",
-                Email = "brandoteam@brando.dev",
-                Imagem = "https://...",
-                Name = "Equipe Brando Dev",
-                PasswordHash = "Hash",
-                Slug = "Equipe-Brando"
-            };
 
 
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Insert<User>(user);
-                Console.WriteLine("Cadastro realizado com sucesso!");
-            }
-        }
 
-        public static void DeleteUser()
-        {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                var user = connection.Get<User>(2);
-                connection.Delete<User>(user);
-                Console.WriteLine("Exclusão realizado com sucesso!");
-            }
-        }
+
+
+
+
+
+
+
+
+
+
+        // public static void ReadUser()
+        // {
+        //     using (var connection = new SqlConnection(CONNECTION_STRING))
+        //     {
+        //         var users = connection.Get<User>(1);
+        //         Console.WriteLine(users.Name);
+        //     }
+        // }
+
+        // public static void CreateUser()
+        // {
+        //     var user = new User()
+        //     {
+        //         Bio = "Equipe Brando.dev",
+        //         Email = "brandoteam@brando.dev",
+        //         Imagem = "https://...",
+        //         Name = "Equipe Brando Dev",
+        //         PasswordHash = "Hash",
+        //         Slug = "Equipe-Brando"
+        //     };
+
+
+        //     using (var connection = new SqlConnection(CONNECTION_STRING))
+        //     {
+        //         connection.Insert<User>(user);
+        //         Console.WriteLine("Cadastro realizado com sucesso!");
+        //     }
+        // }
+
+        // public static void DeleteUser()
+        // {
+        //     using (var connection = new SqlConnection(CONNECTION_STRING))
+        //     {
+        //         var user = connection.Get<User>(2);
+        //         connection.Delete<User>(user);
+        //         Console.WriteLine("Exclusão realizado com sucesso!");
+        //     }
+        // }
     }
 
 
